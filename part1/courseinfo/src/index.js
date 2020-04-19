@@ -6,21 +6,25 @@ const Header = (props) => {
   return <h1>{props.course}</h1>;
 };
 
+// Refactor the Content component so that it does not render any names of parts or their number of exercises by itself.
+const Part = (props) => {
+  const { part, exercise } = props;
+  return (
+    <p>
+      {part} {exercise}
+    </p>
+  );
+};
+
 // Content renders the parts and their number of exercises
 const Content = (props) => {
   const { part1, part2, part3, exercises1, exercises2, exercises3 } = props;
   return (
-    <React.Fragment>
-      <p>
-        {part1} {exercises1}
-      </p>
-      <p>
-        {part2} {exercises2}
-      </p>
-      <p>
-        {part3} {exercises3}
-      </p>
-    </React.Fragment>
+    <div>
+      <Part part={part1} exercise={exercises1}></Part>
+      <Part part={part2} exercise={exercises2}></Part>
+      <Part part={part3} exercise={exercises3}></Part>
+    </div>
   );
 };
 
