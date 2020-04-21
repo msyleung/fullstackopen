@@ -1,19 +1,32 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import "./index.css";
 
 const App = ({ anecdotes }) => {
   const [selected, setSelected] = useState(0);
+  const [points, setPoints] = useState(new Array(anecdotes.length).fill(0));
+
+  const handleVote = () => {
+    const copy = [...points];
+    copy[selected] += 1;
+    setPoints(copy);
+  };
 
   const handleNextSelected = () => {
     let nextSelected = Math.floor(Math.random() * 6);
-    console.log(nextSelected);
     setSelected(nextSelected);
   };
 
   return (
     <div className="container">
-      <div className="quote">{anecdotes[selected]}</div>
-      <button onClick={handleNextSelected}>next</button>
+      <h1 className="quote">{anecdotes[selected]}</h1>
+      <div className="points">
+        has {points[selected]} vote{points[selected] === 1 ? "" : "s"}
+      </div>
+      <div className="buttons">
+        <button onClick={handleVote}>vote</button>
+        <button onClick={handleNextSelected}>next</button>
+      </div>
     </div>
   );
 };
