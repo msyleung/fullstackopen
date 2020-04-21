@@ -24,19 +24,21 @@ const Statistics = ({
   handlePercentagePositive,
 }) => {
   return (
-    <div class="statistics">
-      <h1 class="content">Statistics</h1>
+    <div className="statistics">
+      <h1 className="content">Statistics</h1>
       {total > 0 ? (
-        <table class="Statistic">
-          <Statistic text={"good"} value={good}></Statistic>
-          <Statistic text={"neutral"} value={neutral}></Statistic>
-          <Statistic text={"bad"} value={bad}></Statistic>
-          <Statistic text={"all"} value={total}></Statistic>
-          <Statistic text={"average"} value={handleAverage()}></Statistic>
-          <Statistic
-            text={"positive"}
-            value={`${handlePercentagePositive()}%`}
-          ></Statistic>
+        <table className="Statistic">
+          <tbody>
+            <Statistic text={"good"} value={good}></Statistic>
+            <Statistic text={"neutral"} value={neutral}></Statistic>
+            <Statistic text={"bad"} value={bad}></Statistic>
+            <Statistic text={"all"} value={total}></Statistic>
+            <Statistic text={"average"} value={handleAverage()}></Statistic>
+            <Statistic
+              text={"positive"}
+              value={`${handlePercentagePositive()}%`}
+            ></Statistic>
+          </tbody>
         </table>
       ) : (
         "No Feedback Given"
@@ -62,9 +64,9 @@ const App = () => {
   };
 
   return (
-    <div class="container">
-      <h1 class="header">Give feedback</h1>
-      <div class="buttons">
+    <div className="container">
+      <h1 className="header">Give feedback</h1>
+      <div className="buttons">
         <Button handleClick={() => setGood(good + 1)} text="good"></Button>
         <Button
           handleClick={() => setNeutral(neutral + 1)}
