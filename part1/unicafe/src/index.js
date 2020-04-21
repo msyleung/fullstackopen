@@ -6,11 +6,11 @@ const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>{text}</button>
 );
 
-const Results = ({ name, details }) => {
+const Statistic = ({ text, value }) => {
   return (
     <tr>
-      <td>{name}</td>
-      <td>{details}</td>
+      <td>{text}</td>
+      <td>{value}</td>
     </tr>
   );
 };
@@ -27,16 +27,16 @@ const Statistics = ({
     <div class="statistics">
       <h1 class="content">Statistics</h1>
       {total > 0 ? (
-        <table class="results">
-          <Results name={"good"} details={good}></Results>
-          <Results name={"neutral"} details={neutral}></Results>
-          <Results name={"bad"} details={bad}></Results>
-          <Results name={"all"} details={total}></Results>
-          <Results name={"average"} details={handleAverage()}></Results>
-          <Results
-            name={"positive"}
-            details={`${handlePercentagePositive()}%`}
-          ></Results>
+        <table class="Statistic">
+          <Statistic text={"good"} value={good}></Statistic>
+          <Statistic text={"neutral"} value={neutral}></Statistic>
+          <Statistic text={"bad"} value={bad}></Statistic>
+          <Statistic text={"all"} value={total}></Statistic>
+          <Statistic text={"average"} value={handleAverage()}></Statistic>
+          <Statistic
+            text={"positive"}
+            value={`${handlePercentagePositive()}%`}
+          ></Statistic>
         </table>
       ) : (
         "No Feedback Given"
