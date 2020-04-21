@@ -19,6 +19,17 @@ const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
+  const total = good + neutral + bad;
+
+  const handleAverage = () => {
+    // the average score (good: 1, neutral: 0, bad: -1)
+    return good / total + (bad / total) * -1 + (neutral / total) * 0 || 0;
+  };
+
+  const handlePercentagePositive = () => {
+    // the average score (good: 1, neutral: 0, bad: -1)
+    return (good / total) * 100 || 0;
+  };
 
   return (
     <div class="container">
@@ -32,13 +43,17 @@ const App = () => {
         <Button handleClick={() => setBad(bad + 1)} text="bad"></Button>
       </div>
       <h1 class="content">Statistics</h1>
-      <div class="results">
-        <table>
-          <Results name={"good"} details={good}></Results>
-          <Results name={"neutral"} details={neutral}></Results>
-          <Results name={"bad"} details={bad}></Results>
-        </table>
-      </div>
+      <table class="results">
+        <Results name={"good"} details={good}></Results>
+        <Results name={"neutral"} details={neutral}></Results>
+        <Results name={"bad"} details={bad}></Results>
+        <Results name={"all"} details={total}></Results>
+        <Results name={"average"} details={handleAverage()}></Results>
+        <Results
+          name={"positive"}
+          details={`${handlePercentagePositive()}%`}
+        ></Results>
+      </table>
     </div>
   );
 };
