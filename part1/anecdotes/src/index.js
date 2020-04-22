@@ -2,6 +2,20 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
+const QuoteDisplayer = ({ title, quote, points }) => {
+  return (
+    <div className="display">
+      <h1>{title}</h1>
+      <div className="content">
+        <div className="quote">{quote}</div>
+        <div className="points">
+          has {points} vote{points === 1 ? "" : "s"}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const App = ({ anecdotes }) => {
   const [selected, setSelected] = useState(0);
   const [points, setPoints] = useState(new Array(anecdotes.length).fill(0));
@@ -17,16 +31,30 @@ const App = ({ anecdotes }) => {
     setSelected(nextSelected);
   };
 
+  const handleMostVotes = () => {
+    let maxPoints = Math.max(...points);
+    let indexOfMaxPoints = points.indexOf(maxPoints);
+    return (
+      <QuoteDisplayer
+        title="Anecdote with the most votes"
+        quote={anecdotes[indexOfMaxPoints]}
+        points={maxPoints}
+      ></QuoteDisplayer>
+    );
+  };
+
   return (
     <div className="container">
-      <h1 className="quote">{anecdotes[selected]}</h1>
-      <div className="points">
-        has {points[selected]} vote{points[selected] === 1 ? "" : "s"}
-      </div>
+      <QuoteDisplayer
+        title="Anecdote of the day"
+        quote={anecdotes[selected]}
+        points={points[selected]}
+      ></QuoteDisplayer>
       <div className="buttons">
         <button onClick={handleVote}>vote</button>
         <button onClick={handleNextSelected}>next</button>
       </div>
+      {handleMostVotes()}
     </div>
   );
 };
