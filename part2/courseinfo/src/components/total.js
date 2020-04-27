@@ -6,7 +6,13 @@ const Total = (props) => {
   const totalExercises = parts
     .map((part) => part.exercises)
     .reduce((accumulator, currentValue) => accumulator + currentValue);
-  return <p>Number of exercises {totalExercises}</p>;
+  return (
+    <p>
+      <b>
+        total of {totalExercises} exercise{totalExercises !== 1 ? "s" : ""}
+      </b>
+    </p>
+  );
 };
 
 export default Total;
