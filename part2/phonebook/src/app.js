@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import Display from "./display";
 
 const App = () => {
   const [persons, setPersons] = useState([{ id: 0, name: "Arto Hellas" }]);
+  const [newNumber, setNewNumber] = useState("");
   const [newName, setNewName] = useState("");
 
   const sendAlert = (name) => {
@@ -11,14 +13,21 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    let newPerson = { name: newName, id: persons.length + 1 };
+    let newPerson = {
+      id: persons.length + 1,
+      name: newName,
+      number: newNumber,
+    };
     let exists = persons.some((person) => person.name === newPerson.name);
     exists ? sendAlert(newPerson.name) : setPersons(persons.concat(newPerson));
     setNewName("");
+    setNewNumber("");
   };
 
   const handleChange = (event) => {
-    setNewName(event.target.value);
+    event.target.id === "name"
+      ? setNewName(event.target.value)
+      : setNewNumber(event.target.value);
   };
 
   return (
@@ -26,16 +35,17 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          name: <input value={newName} onChange={handleChange} />
+          name: <input value={newName} onChange={handleChange} id="name" />
+        </div>
+        <div>
+          number:{" "}
+          <input value={newNumber} onChange={handleChange} id="number" />
         </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
-      <h2>Numbers</h2>
-      {persons.map((person) => (
-        <p key={person.id}>{person.name}</p>
-      ))}
+      <Display persons={persons} />
     </div>
   );
 };
