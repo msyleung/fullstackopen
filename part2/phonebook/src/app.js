@@ -4,10 +4,17 @@ const App = () => {
   const [persons, setPersons] = useState([{ id: 0, name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("");
 
+  const sendAlert = (name) => {
+    let message = `${name} is already added to phonebook`;
+    window.alert(message);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     let newPerson = { name: newName, id: persons.length + 1 };
-    setPersons(persons.concat(newPerson));
+    let exists = persons.some((person) => person.name === newPerson.name);
+    exists ? sendAlert(newPerson.name) : setPersons(persons.concat(newPerson));
+    setNewName("");
   };
 
   const handleChange = (event) => {
