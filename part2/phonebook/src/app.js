@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Display from "./display";
 import NewEntry from "./new";
 import Search from "./search";
+import axios from "axios";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { id: 0, name: "Arto Hellas" },
-    { id: 1, name: "Ada Lovelace", number: "39-44-5323523" },
-    { id: 2, name: "Dan Abramov", number: "12-43-234345" },
-    { id: 3, name: "Mary Poppendieck", number: "39-23-6423122" },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [personsToDisplay, setPersonsToDisplay] = useState(persons);
   const [search, setSearch] = useState("");
-
   const [newNumber, setNewNumber] = useState("");
   const [newName, setNewName] = useState("");
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/persons").then((response) => {
+      setPersons(response.data);
+      setPersonsToDisplay(response.data);
+    });
+  }, []);
 
   const sendAlert = (name) => {
     let message = `${name} is already added to phonebook`;
