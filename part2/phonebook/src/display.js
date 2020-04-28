@@ -5,7 +5,9 @@ const Display = ({ persons }) => {
     <table>
       <thead>
         <tr>
-          <th>Numbers</th>
+          <th>
+            <h2>Numbers</h2>
+          </th>
         </tr>
       </thead>
       <tbody>
