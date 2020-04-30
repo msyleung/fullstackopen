@@ -1,6 +1,40 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const DisplayWeather = ({ capital }) => {
+  const [weather, setWeather] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&query=${capital}`
+      )
+      .then((response) => {
+        setWeather(response.data.current);
+      });
+  }, [capital]);
+
+  return (
+    <div>
+      <h2>Weather in {capital}</h2>
+      {weather && (
+        <div>
+          <p>Temperature: {weather.temperature}</p>
+          <p>
+            <img
+              src={weather.weather_icons[0]}
+              alt={weather.weather_descriptions[0]}
+            ></img>
+          </p>
+          <p>
+            Wind: {weather.wind_speed} mph direction {weather.wind_dir}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const DisplayOne = ({ country }) => {
   return (
     <div>
@@ -16,6 +50,7 @@ const DisplayOne = ({ country }) => {
       <p>
         <img src={country.flag} alt="country flag" width="100vh"></img>
       </p>
+      <DisplayWeather capital={country.capital} />
     </div>
   );
 };
