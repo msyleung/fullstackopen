@@ -20,18 +20,42 @@ const DisplayOne = ({ country }) => {
   );
 };
 
-const DisplayHelper = ({ countries }) => {
+const DisplayAll = ({ countries, handleButton }) => {
+  return (
+    <div>
+      {countries.map((country, index) => (
+        <div key={country.name}>
+          {country.name}
+          <button
+            onClick={() => {
+              handleButton(countries[index]);
+            }}
+          >
+            show
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const DisplayHelper = ({
+  countries,
+  handleButton,
+  showOne,
+  currentCountry,
+}) => {
   if (countries.length > 10) {
-    return <div>Too many matches</div>;
+    return <div>Too many matches, specify another filter</div>;
   } else if (countries.length === 1) {
     return <DisplayOne country={countries[0]} />;
   }
   return (
     <div>
-      {countries &&
-        countries.map((country) => (
-          <div key={country.name}>{country.name}</div>
-        ))}
+      {showOne && <DisplayOne country={currentCountry} />}
+      {!showOne && countries && (
+        <DisplayAll countries={countries} handleButton={handleButton} />
+      )}
     </div>
   );
 };
@@ -39,6 +63,8 @@ const DisplayHelper = ({ countries }) => {
 const App = () => {
   const [search, setSearch] = useState("");
   const [countriesData, setCountriesData] = useState([]);
+  const [showOne, setShowOne] = useState(false);
+  const [currentCountry, setCurrentCountry] = useState("");
 
   useEffect(() => {
     axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
@@ -46,14 +72,21 @@ const App = () => {
     });
   }, []);
 
+  const handleButton = (country) => {
+    setShowOne(!showOne);
+    setCurrentCountry(country);
+  };
+
   const handleSearch = (event) => {
     setSearch(event.target.value);
+    setShowOne(false);
+    setCurrentCountry("");
   };
 
   const searchCountries = () => {
     if (!search) return "";
     let matchingCountries = countriesData.filter((country) => {
-      return country.name.includes(search);
+      return country.name.toLowerCase().includes(search.toLowerCase());
     });
     return matchingCountries;
   };
@@ -61,7 +94,12 @@ const App = () => {
   return (
     <div className="container">
       Find countries: <input value={search} onChange={handleSearch}></input>
-      <DisplayHelper countries={searchCountries()} />
+      <DisplayHelper
+        countries={searchCountries()}
+        handleButton={handleButton}
+        showOne={showOne}
+        currentCountry={currentCountry}
+      />
     </div>
   );
 };
