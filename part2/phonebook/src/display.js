@@ -1,6 +1,6 @@
 import React from "react";
 
-const Display = ({ persons }) => {
+const Display = ({ persons, handleDelete }) => {
   return (
     <table>
       <thead>
@@ -15,6 +15,11 @@ const Display = ({ persons }) => {
           <tr key={person.id}>
             <td>{person.name}</td>
             <td>{person.number}</td>
+            <td>
+              <button onClick={handleDelete} id={person.id} name={person.name}>
+                delete
+              </button>
+            </td>
           </tr>
         ))}
       </tbody>

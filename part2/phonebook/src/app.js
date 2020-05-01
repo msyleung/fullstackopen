@@ -11,8 +11,12 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [newName, setNewName] = useState("");
 
-  useEffect(() => {
+  const setDatabase = () => {
     Api.getAll().then((newPeople) => setPersons(newPeople));
+  };
+
+  useEffect(() => {
+    setDatabase();
   }, []);
 
   useEffect(() => {
@@ -68,6 +72,15 @@ const App = () => {
     }
   };
 
+  const handleDelete = (event) => {
+    let { id, name } = event.target;
+    if (window.confirm(`Delete ${name}?`)) {
+      Api.destroy(id).then(() => {
+        setDatabase();
+      });
+    }
+  };
+
   return (
     <div className="container">
       <h1>Phonebook</h1>
@@ -78,7 +91,7 @@ const App = () => {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
       />
-      <Display persons={personsToDisplay} />
+      <Display persons={personsToDisplay} handleDelete={handleDelete} />
     </div>
   );
 };
