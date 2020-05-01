@@ -33,22 +33,31 @@ const App = () => {
     setPersonsToDisplay(newSearch);
   }, [search, persons]);
 
-  const sendAlert = (name) => {
-    let message = `${name} is already added to phonebook`;
-    window.alert(message);
+  const handleExistingUser = (currentPerson, newInfo) => {
+    let { number, name, id } = currentPerson;
+    if (number === newInfo.number) {
+      window.alert(`${name} is already added to the phonebook!`);
+    } else {
+      let replace = window.confirm(
+        `${name} is already added to the phonebook, replace the old number with the new one?`
+      );
+      if (replace) {
+        Api.update(id, newInfo).then(() => setDatabase());
+      }
+    }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    let newPerson = {
+    let newInfo = {
       id: persons.length + 1,
       name: newName,
       number: newNumber,
     };
-    let exists = persons.some((person) => person.name === newPerson.name);
-    exists
-      ? sendAlert(newPerson.name)
-      : Api.create(newPerson).then((savedPerson) => {
+    let currentPerson = persons.find((person) => person.name === newInfo.name);
+    currentPerson
+      ? handleExistingUser(currentPerson, newInfo)
+      : Api.create(newInfo).then((savedPerson) => {
           setPersons(persons.concat(savedPerson));
         });
     setNewName("");

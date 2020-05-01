@@ -10,8 +10,14 @@ const create = (newPerson) => {
   return axios.post(baseUrl, newPerson).then((response) => response.data);
 };
 
+const update = (id, newInfo) => {
+  return axios
+    .put(`${baseUrl}/${id}`, newInfo)
+    .then((response) => response.data);
+};
+
 const destroy = (id) => {
   return axios.delete(`${baseUrl}/${id}`).then((response) => response.data);
 };
 
-export default { getAll, create, destroy };
+export default { getAll, create, update, destroy };
