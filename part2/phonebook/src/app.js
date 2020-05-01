@@ -10,13 +10,24 @@ const App = () => {
   const [search, setSearch] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newName, setNewName] = useState("");
+  const baseUrl = "http://localhost:3001/persons";
+
+  const create = (newPerson) => {
+    axios
+      .post(baseUrl, newPerson)
+      .then((response) => response.data)
+      .then((savedPerson) => setPersons(persons.concat(savedPerson)));
+  };
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
+    axios.get(baseUrl).then((response) => {
       setPersons(response.data);
-      setPersonsToDisplay(response.data);
     });
   }, []);
+
+  useEffect(() => {
+    setPersonsToDisplay(persons);
+  }, [persons]);
 
   const sendAlert = (name) => {
     let message = `${name} is already added to phonebook`;
@@ -31,7 +42,7 @@ const App = () => {
       number: newNumber,
     };
     let exists = persons.some((person) => person.name === newPerson.name);
-    exists ? sendAlert(newPerson.name) : setPersons(persons.concat(newPerson));
+    exists ? sendAlert(newPerson.name) : create(newPerson);
     setNewName("");
     setNewNumber("");
   };
