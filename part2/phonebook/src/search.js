@@ -1,13 +1,11 @@
 import React from "react";
 import "./index.css";
 
-const Search = ({ search, handleChange, handleSearch }) => {
+const Search = ({ search, handleChange }) => {
   return (
     <div className="search">
       Search:
-      <form onSubmit={handleSearch}>
-        <input value={search} onChange={handleChange} id="search" />
-      </form>
+      <input value={search} onChange={handleChange} id="search" />
     </div>
   );
 };

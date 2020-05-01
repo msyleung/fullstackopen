@@ -19,6 +19,16 @@ const App = () => {
     setPersonsToDisplay(persons);
   }, [persons]);
 
+  useEffect(() => {
+    if (!search) {
+      return setPersonsToDisplay(persons);
+    }
+    let newSearch = persons.filter((person) =>
+      person.name.toLowerCase().includes(search.toLowerCase())
+    );
+    setPersonsToDisplay(newSearch);
+  }, [search, persons]);
+
   const sendAlert = (name) => {
     let message = `${name} is already added to phonebook`;
     window.alert(message);
@@ -42,8 +52,7 @@ const App = () => {
   };
 
   const handleChange = (event) => {
-    let id = event.target.id;
-    let value = event.target.value;
+    const { id, value } = event.target;
     switch (id) {
       case "name":
         setNewName(value);
@@ -59,26 +68,10 @@ const App = () => {
     }
   };
 
-  const handleSearch = (event) => {
-    event.preventDefault();
-    let newSearch = persons.filter((person) =>
-      person.name.toLowerCase().includes(search.toLowerCase())
-    );
-    if (newSearch.length > 0) {
-      setPersonsToDisplay(newSearch);
-    } else {
-      setPersonsToDisplay(persons);
-    }
-  };
-
   return (
     <div className="container">
       <h1>Phonebook</h1>
-      <Search
-        search={search}
-        handleChange={handleChange}
-        handleSearch={handleSearch}
-      />
+      <Search search={search} handleChange={handleChange} />
       <NewEntry
         newName={newName}
         newNumber={newNumber}
