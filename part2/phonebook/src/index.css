@@ -46,6 +46,11 @@ code {
   width: 60%;
 }
 
+.error {
+  border-color: red;
+  background-color: salmon;
+}
+
 .newEntry {
   display: flex;
   flex-direction: column;

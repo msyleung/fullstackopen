@@ -88,9 +88,13 @@ const App = () => {
   const handleDelete = (event) => {
     let { id, name } = event.target;
     if (window.confirm(`Delete ${name}?`)) {
-      Api.destroy(id).then(() => {
-        setDatabase();
-      });
+      Api.destroy(id)
+        .then(() => {
+          setDatabase();
+        })
+        .catch(() => {
+          setMessage(`Error: ${name} has already been deleted`);
+        });
     }
   };
 
