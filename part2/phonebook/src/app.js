@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Display from "./display";
 import NewEntry from "./new";
 import Search from "./search";
-import axios from "axios";
+import Api from "./services/api";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -10,19 +10,9 @@ const App = () => {
   const [search, setSearch] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newName, setNewName] = useState("");
-  const baseUrl = "http://localhost:3001/persons";
-
-  const create = (newPerson) => {
-    axios
-      .post(baseUrl, newPerson)
-      .then((response) => response.data)
-      .then((savedPerson) => setPersons(persons.concat(savedPerson)));
-  };
 
   useEffect(() => {
-    axios.get(baseUrl).then((response) => {
-      setPersons(response.data);
-    });
+    Api.getAll().then((newPeople) => setPersons(newPeople));
   }, []);
 
   useEffect(() => {
@@ -42,7 +32,11 @@ const App = () => {
       number: newNumber,
     };
     let exists = persons.some((person) => person.name === newPerson.name);
-    exists ? sendAlert(newPerson.name) : create(newPerson);
+    exists
+      ? sendAlert(newPerson.name)
+      : Api.create(newPerson).then((savedPerson) => {
+          setPersons(persons.concat(savedPerson));
+        });
     setNewName("");
     setNewNumber("");
   };
