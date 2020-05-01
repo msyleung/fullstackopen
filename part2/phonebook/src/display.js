@@ -12,7 +12,7 @@ const Display = ({ persons, handleDelete }) => {
       </thead>
       <tbody>
         {persons.map((person) => (
-          <tr key={person.id}>
+          <tr key={person.id} className="row">
             <td>{person.name}</td>
             <td>{person.number}</td>
             <td>

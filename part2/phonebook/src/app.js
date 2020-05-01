@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Display from "./display";
 import NewEntry from "./new";
+import Notification from "./notification";
 import Search from "./search";
 import Api from "./services/api";
 
@@ -10,6 +11,7 @@ const App = () => {
   const [search, setSearch] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newName, setNewName] = useState("");
+  const [message, setMessage] = useState("");
 
   const setDatabase = () => {
     Api.getAll().then((newPeople) => setPersons(newPeople));
@@ -43,6 +45,7 @@ const App = () => {
       );
       if (replace) {
         Api.update(id, newInfo).then(() => setDatabase());
+        setMessage(`${name} has been updated!`);
       }
     }
   };
@@ -59,6 +62,7 @@ const App = () => {
       ? handleExistingUser(currentPerson, newInfo)
       : Api.create(newInfo).then((savedPerson) => {
           setPersons(persons.concat(savedPerson));
+          setMessage(`${savedPerson.name} has been added to the phonebook!`);
         });
     setNewName("");
     setNewNumber("");
@@ -92,8 +96,11 @@ const App = () => {
 
   return (
     <div className="container">
-      <h1>Phonebook</h1>
-      <Search search={search} handleChange={handleChange} />
+      <div className="navbar">
+        <h1>Phonebook</h1>
+        <Search search={search} handleChange={handleChange} />
+      </div>
+      {message && <Notification message={message} setMessage={setMessage} />}
       <NewEntry
         newName={newName}
         newNumber={newNumber}

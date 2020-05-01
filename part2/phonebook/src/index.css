@@ -18,8 +18,66 @@ code {
   align-items: center;
 }
 
+.navbar {
+  display: flex;
+  flex-direction: row;
+  width: 60%;
+  justify-content: space-between;
+  box-shadow: 0px 5px;
+}
+
 .search {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+}
+
+#search {
+  width: 60%;
+}
+
+.notification {
+  border-style: dotted;
+  border-color: greenyellow;
+  background-color: yellowgreen;
+  padding: 5px;
+  margin-top: 20px;
+  width: 60%;
+}
+
+.newEntry {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+
+.entryForm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-shadow: 0px 5px;
+  width: 100%;
+  justify-content: space-between;
+  padding-bottom: 10px;
+}
+
+table {
+  display: flex;
+  width: 60%;
+  flex-direction: column;
+}
+
+tbody {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+td:nth-child(-n + 2) {
+  flex: 2;
 }
