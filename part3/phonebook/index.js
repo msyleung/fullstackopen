@@ -25,8 +25,13 @@ let persons = [
   },
 ];
 
-const findUser = (id) => {
+const findById = (id) => {
   const matchingPerson = persons.find((person) => person.id === id);
+  return matchingPerson;
+};
+
+const findByName = (name) => {
+  const matchingPerson = persons.find((person) => person.name === name);
   return matchingPerson;
 };
 
@@ -40,7 +45,7 @@ app.get("/api/persons", (req, res) => {
 
 app.get("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
-  let person = findUser(id);
+  let person = findById(id);
   if (person) {
     res.json(person);
   } else {
@@ -50,16 +55,19 @@ app.get("/api/persons/:id", (req, res) => {
 
 app.post("/api/persons", (req, res) => {
   let body = req.body;
+  let { name, number } = body;
 
-  if (!body) {
+  if (!body || !name || !number) {
     res.status(400).json({
       error: "Status Missing",
     });
+  } else if (findByName(name)) {
+    res.status(409).json({ error: "name must be unique" });
   }
 
   const person = {
-    name: body.name,
-    number: body.number,
+    name: name,
+    number: number,
     id: Math.floor(Math.random() * 500),
   };
 
