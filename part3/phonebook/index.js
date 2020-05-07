@@ -24,12 +24,27 @@ let persons = [
   },
 ];
 
+const findUser = (request) => {
+  const id = Number(request.params.id);
+  const matchingPerson = persons.find((person) => person.id === id);
+  return matchingPerson;
+};
+
 app.get("/", (req, res) => {
   res.send("<h1>Hello!</h1>");
 });
 
 app.get("/api/persons", (req, res) => {
   res.json(persons);
+});
+
+app.get("/api/persons/:id", (req, res) => {
+  let person = findUser(req);
+  if (person) {
+    res.json(person);
+  } else {
+    res.status(404).end();
+  }
 });
 
 app.get("/api/info", (req, res) => {
