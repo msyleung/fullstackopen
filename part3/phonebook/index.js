@@ -24,8 +24,7 @@ let persons = [
   },
 ];
 
-const findUser = (request) => {
-  const id = Number(request.params.id);
+const findUser = (id) => {
   const matchingPerson = persons.find((person) => person.id === id);
   return matchingPerson;
 };
@@ -39,12 +38,20 @@ app.get("/api/persons", (req, res) => {
 });
 
 app.get("/api/persons/:id", (req, res) => {
-  let person = findUser(req);
+  const id = Number(req.params.id);
+  let person = findUser(id);
   if (person) {
     res.json(person);
   } else {
     res.status(404).end();
   }
+});
+
+app.delete("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  persons = persons.filter((person) => person.id !== id);
+
+  res.status(204).end();
 });
 
 app.get("/api/info", (req, res) => {
