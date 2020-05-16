@@ -72,25 +72,29 @@ app.post("/api/persons", (req, res) => {
     });
   }
 
-  let person = {
-    number: number,
-  };
+  Person.findOne({ name: name })
+    .then((foundPerson) => {
+      if (foundPerson && foundPerson.id) {
+        Person.findOneAndUpdate(
+          { name: name },
+          { number: number },
+          {
+            new: true,
+          }
+        ).then((updatedPerson) => res.json(updatedPerson.toJSON()));
+      } else {
+        const person = new Person({
+          name: name,
+          number: number,
+          id: Math.floor(Math.random() * 500),
+        });
 
-  Person.findOneAndUpdate({ name: name }, person, {
-    new: true,
-  })
-    .then((updatedPerson) => res.json(updatedPerson.toJSON()))
-    .catch((error) => {
-      let person = new Person({
-        name: name,
-        number: number,
-        id: Math.floor(Math.random() * 500),
-      });
-
-      person.save().then((savedPerson) => {
-        res.json(savedPerson.toJSON());
-      });
-    });
+        person.save().then((savedPerson) => {
+          res.json(savedPerson.toJSON());
+        });
+      }
+    })
+    .catch((error) => next(error));
 });
 
 // update by ID
@@ -120,11 +124,19 @@ app.delete("/api/persons/:id", (req, res) => {
     .catch((error) => next(error));
 });
 
-// app.get("/api/info", (req, res) => {
-//   let noun = persons.length === 1 ? "person" : "people";
-//   let date = new Date();
-//   res.send(`Phonebook has info on ${persons.length} ${noun}<p>${date}`);
-// });
+app.get("/api/info", (req, res) => {
+  let count;
+  Person.estimatedDocumentCount({}, (err, ct) => {
+    count;
+  }).then((response) => {
+    count = response;
+    console.log(count);
+
+    let noun = count === 1 ? "person" : "people";
+    let date = new Date();
+    res.send(`Phonebook has info on ${count} ${noun}<p>${date}`);
+  });
+});
 
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: "unknown endpoint" });
