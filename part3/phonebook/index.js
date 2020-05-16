@@ -24,7 +24,7 @@ app.use(
 );
 app.use(cors());
 app.use(bodyParser.json());
-app.use(logger);
+// app.use(logger);
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
@@ -71,19 +71,45 @@ app.post("/api/persons", (req, res) => {
       error: "Status Missing",
     });
   }
-  // else if (findByName(name)) {
-  //   res.status(409).json({ error: "name must be unique" });
-  // }
 
-  const person = new Person({
+  let person = {
+    number: number,
+  };
+
+  Person.findOneAndUpdate({ name: name }, person, {
+    new: true,
+  })
+    .then((updatedPerson) => res.json(updatedPerson.toJSON()))
+    .catch((error) => {
+      let person = new Person({
+        name: name,
+        number: number,
+        id: Math.floor(Math.random() * 500),
+      });
+
+      person.save().then((savedPerson) => {
+        res.json(savedPerson.toJSON());
+      });
+    });
+});
+
+// update by ID
+app.put("/api/persons/:id", (req, res) => {
+  const body = req.body;
+  let { name, number } = body;
+
+  console.log(body);
+
+  const person = {
     name: name,
     number: number,
-    id: Math.floor(Math.random() * 500),
-  });
+  };
 
-  person.save().then((savedPerson) => {
-    res.json(savedPerson.toJSON());
-  });
+  Person.findByIdAndUpdate(req.params.id, person, {
+    new: true,
+  })
+    .then((updatedPerson) => res.json(updatedPerson.toJSON()))
+    .catch((error) => next(error));
 });
 
 app.delete("/api/persons/:id", (req, res) => {
