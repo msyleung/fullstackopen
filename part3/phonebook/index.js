@@ -85,12 +85,13 @@ app.post("/api/persons", (req, res) => {
   });
 });
 
-// app.delete("/api/persons/:id", (req, res) => {
-//   const id = Number(req.params.id);
-//   persons = Person.filter((person) => person.id !== id);
-
-//   res.status(204).end();
-// });
+app.delete("/api/persons/:id", (req, res) => {
+  Person.findByIdAndRemove(req.params.id)
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch((error) => next(error));
+});
 
 // app.get("/api/info", (req, res) => {
 //   let noun = persons.length === 1 ? "person" : "people";
