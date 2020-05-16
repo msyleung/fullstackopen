@@ -24,6 +24,7 @@ app.use(
 );
 app.use(cors());
 app.use(bodyParser.json());
+app.use(logger);
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
@@ -98,3 +99,20 @@ app.delete("/api/persons/:id", (req, res) => {
 //   let date = new Date();
 //   res.send(`Phonebook has info on ${persons.length} ${noun}<p>${date}`);
 // });
+
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: "unknown endpoint" });
+};
+app.use(unknownEndpoint);
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
