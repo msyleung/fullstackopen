@@ -7,7 +7,12 @@ const getAll = () => {
 };
 
 const create = (newPerson) => {
-  return axios.post(baseUrl, newPerson).then((response) => response.data);
+  return axios
+    .post(baseUrl, newPerson)
+    .then((response) => response.data)
+    .catch((error) => {
+      return error.response.data.message;
+    });
 };
 
 const update = (id, newInfo) => {

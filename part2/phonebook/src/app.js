@@ -61,6 +61,7 @@ const App = () => {
     currentPerson
       ? handleExistingUser(currentPerson, newInfo)
       : Api.create(newInfo).then((savedPerson) => {
+          if (!savedPerson.name) return setMessage(`Error: ${savedPerson}`);
           setPersons(persons.concat(savedPerson));
           setMessage(`${savedPerson.name} has been added to the phonebook!`);
         });
