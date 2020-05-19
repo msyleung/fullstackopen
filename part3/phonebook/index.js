@@ -31,16 +31,6 @@ app.listen(PORT, () => {
 });
 const Person = require("./models/person");
 
-// const findById = (id) => {
-//   const matchingPerson = Person.find((person) => person.id === id);
-//   return matchingPerson;
-// };
-
-// const findByName = (name) => {
-//   const matchingPerson = Person.find((person) => person.name === name);
-//   return matchingPerson;
-// };
-
 app.get("/", (req, res) => {
   res.send("<h1>Hello!</h1>");
 });
@@ -51,18 +41,15 @@ app.get("/api/persons", (req, res) => {
   });
 });
 
-app.get("/api/persons/:id", (req, res) => {
+app.get("/api/persons/:id", (req, res, next) => {
   Person.findById(req.params.id)
     .then((person) => {
       res.json(person.toJSON());
     })
-    .catch((error) => {
-      console.log(error);
-      res.status(404).end();
-    });
+    .catch((error) => next(error));
 });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   let body = req.body;
   let { name, number } = body;
 
@@ -81,7 +68,9 @@ app.post("/api/persons", (req, res) => {
           {
             new: true,
           }
-        ).then((updatedPerson) => res.json(updatedPerson.toJSON()));
+        )
+          .then((updatedPerson) => res.json(updatedPerson.toJSON()))
+          .catch((error) => next(error));
       } else {
         const person = new Person({
           name: name,
@@ -89,16 +78,22 @@ app.post("/api/persons", (req, res) => {
           id: Math.floor(Math.random() * 500),
         });
 
-        person.save().then((savedPerson) => {
-          res.json(savedPerson.toJSON());
-        });
+        person
+          .save()
+          .then((savedPerson) => {
+            res.json(savedPerson.toJSON());
+          })
+          .catch((error) => {
+            res.status(400).send({ message: error.message });
+            next(error);
+          });
       }
     })
     .catch((error) => next(error));
 });
 
 // update by ID
-app.put("/api/persons/:id", (req, res) => {
+app.put("/api/persons/:id", (req, res, next) => {
   const body = req.body;
   let { name, number } = body;
 
@@ -116,7 +111,7 @@ app.put("/api/persons/:id", (req, res) => {
     .catch((error) => next(error));
 });
 
-app.delete("/api/persons/:id", (req, res) => {
+app.delete("/api/persons/:id", (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
     .then(() => {
       res.status(204).end();
@@ -130,7 +125,6 @@ app.get("/api/info", (req, res) => {
     count;
   }).then((response) => {
     count = response;
-    console.log(count);
 
     let noun = count === 1 ? "person" : "people";
     let date = new Date();
