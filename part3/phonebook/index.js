@@ -3,7 +3,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-morgan.token("body", function (req, res) {
+morgan.token("body", function (req) {
   return req["body"];
 });
 const app = express();
@@ -121,7 +121,7 @@ app.delete("/api/persons/:id", (req, res, next) => {
 
 app.get("/api/info", (req, res) => {
   let count;
-  Person.estimatedDocumentCount({}, (err, ct) => {
+  Person.estimatedDocumentCount({}, () => {
     count;
   }).then((response) => {
     count = response;

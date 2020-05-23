@@ -3,6 +3,7 @@ const uniqueValidator = require("mongoose-unique-validator");
 
 const url = process.env.MONGODB_URI;
 console.log("connecting to MongoDB");
+console.log(url);
 
 mongoose
   .connect(url, {
@@ -11,7 +12,7 @@ mongoose
     useFindAndModify: false,
     useCreateIndex: true,
   })
-  .then((result) => {
+  .then(() => {
     console.log("connected!");
   })
   .catch((error) => {
