@@ -26,15 +26,15 @@ if (process.argv.length > 3) {
     number: number,
   });
 
-  person.save().then((res) => {
+  person.save().then(() => {
     console.log(`added ${person.name} ${number} to phonebook`);
     mongoose.connection.close();
   });
 } else {
   Person.find({}).then((persons) => {
     console.log("phonebook:");
-    for (person of persons) {
-      console.log(`${person.name}`);
+    for (let individual of persons) {
+      console.log(`${individual.name}`);
     }
     mongoose.connection.close();
   });
